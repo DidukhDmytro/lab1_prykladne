@@ -4,11 +4,13 @@ import com.example.carservice.exception.InvalidArgumentException;
 import com.example.carservice.exception.InvalidStateTransitionException;
 import com.example.carservice.exception.MechanicNotCompatibleException;
 import com.example.carservice.exception.OrderModificationNotAllowedException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class ServiceOrder {
+    private static double URGENT_LABOR_SURCHARGE_FACTOR = 1.20;
     private static String INVALID_DIAGNOSE_STATUS_MESSAGE = "Only created orders can be diagnosed.";
     private static String INVALID_APPROVE_STATUS_MESSAGE = "Only diagnosed orders can be approved.";
     private static String EMPTY_ORDER_MESSAGE = "An order cannot be approved without service work.";
@@ -27,12 +29,14 @@ public class ServiceOrder {
     private List<ServiceWork> works;
     private Mechanic assignedMechanic;
     private OrderStatus status;
+    private OrderPriority priority;
 
     public ServiceOrder(String id, Car car) {
         this.id = id;
         this.car = car;
         this.works = new ArrayList<>();
         this.status = OrderStatus.CREATED;
+        this.priority = OrderPriority.NORMAL;
     }
 
     public String getId() {
@@ -53,6 +57,27 @@ public class ServiceOrder {
 
     public OrderStatus getStatus() {
         return status;
+    }
+
+    public OrderPriority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(OrderPriority priority) {
+        this.priority = priority;
+    }
+
+    public double calculateTotalCost() {
+        BigDecimal partsCost = BigDecimal.ZERO;
+        BigDecimal laborCost = BigDecimal.ZERO;
+        for (ServiceWork work : works) {
+            partsCost = partsCost.add(work.getPartsCost());
+            laborCost = laborCost.add(work.getLaborCost());
+        }
+        if (priority == OrderPriority.URGENT) {
+            laborCost = laborCost.multiply(BigDecimal.valueOf(URGENT_LABOR_SURCHARGE_FACTOR));
+        }
+        return partsCost.add(laborCost).doubleValue();
     }
 
     public void addWork(ServiceWork work) {

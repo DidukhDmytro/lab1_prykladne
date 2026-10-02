@@ -4,6 +4,7 @@ import com.example.carservice.domain.Car;
 import com.example.carservice.domain.Customer;
 import com.example.carservice.domain.Mechanic;
 import com.example.carservice.domain.MechanicSpecialization;
+import com.example.carservice.domain.OrderPriority;
 import com.example.carservice.domain.ServiceOrder;
 import com.example.carservice.domain.ServiceWork;
 import com.example.carservice.exception.DomainException;
@@ -36,11 +37,12 @@ public class CarServiceDemo {
     private static BigDecimal ENGINE_LABOR_COST = new BigDecimal(ENGINE_LABOR_COST_VALUE);
     private static BigDecimal BRAKES_PARTS_COST = new BigDecimal(BRAKES_PARTS_COST_VALUE);
     private static BigDecimal BRAKES_LABOR_COST = new BigDecimal(BRAKES_LABOR_COST_VALUE);
-    private static BigDecimal ZERO_COST = BigDecimal.ZERO;
     private static String EMPTY_ORDER_ID = "order-empty";
     private static String INCOMPATIBLE_ORDER_ID = "order-incompatible";
     private static String BUSY_ORDER_ID = "order-busy";
     private static String OTHER_ACTIVE_ORDER_ID = "order-other-active";
+    private static String NORMAL_PRIORITY_ORDER_ID = "order-normal-priority";
+    private static String URGENT_PRIORITY_ORDER_ID = "order-urgent-priority";
     private static String DUPLICATE_VIN_TEST = "Duplicate VIN registration";
     private static String EMPTY_ORDER_TEST = "Approving an empty order";
     private static String INCOMPATIBLE_MECHANIC_TEST = "Assigning an incompatible mechanic";
@@ -48,6 +50,9 @@ public class CarServiceDemo {
     private static String COMPLETED_ORDER_TEST = "Modifying a completed order";
     private static String POSITIVE_FLOW_MESSAGE = "Positive order flow completed.";
     private static String TOTAL_COST_FORMAT = "Total order cost: %s";
+    private static String PRIORITY_TOTAL_COST_FORMAT = "%s order total cost: %.2f";
+    private static String NORMAL_PRIORITY_LABEL = "Normal";
+    private static String URGENT_PRIORITY_LABEL = "Urgent";
     private static String EXPECTED_ERROR_FORMAT = "%s: expected error - %s";
 
     private CarServiceDemo() {
@@ -90,7 +95,8 @@ public class CarServiceDemo {
         completeWorks(positiveOrder);
         positiveOrder.complete();
         System.out.println(POSITIVE_FLOW_MESSAGE);
-        System.out.println(String.format(TOTAL_COST_FORMAT, calculateTotalCost(positiveOrder)));
+        System.out.println(String.format(TOTAL_COST_FORMAT, positiveOrder.calculateTotalCost()));
+        demonstratePriorityCostCalculation(car, carService);
 
         demonstrateDuplicateVinRejection(carService, customer);
         demonstrateEmptyOrderApprovalRejection(carService, car);
@@ -171,6 +177,30 @@ public class CarServiceDemo {
         }
     }
 
+    private static void demonstratePriorityCostCalculation(Car car, CarService carService) {
+        ServiceOrder normalOrder = createApprovedOrder(
+                carService,
+                NORMAL_PRIORITY_ORDER_ID,
+                car,
+                createEngineWork(),
+                createBrakesWork());
+        ServiceOrder urgentOrder = createApprovedOrder(
+                carService,
+                URGENT_PRIORITY_ORDER_ID,
+                car,
+                createEngineWork(),
+                createBrakesWork());
+        urgentOrder.setPriority(OrderPriority.URGENT);
+        System.out.println(String.format(
+                PRIORITY_TOTAL_COST_FORMAT,
+                NORMAL_PRIORITY_LABEL,
+                normalOrder.calculateTotalCost()));
+        System.out.println(String.format(
+                PRIORITY_TOTAL_COST_FORMAT,
+                URGENT_PRIORITY_LABEL,
+                urgentOrder.calculateTotalCost()));
+    }
+
     private static ServiceOrder createApprovedOrder(
             CarService carService,
             String orderId,
@@ -206,12 +236,6 @@ public class CarServiceDemo {
         for (ServiceWork work : order.getWorks()) {
             work.complete();
         }
-    }
-
-    private static BigDecimal calculateTotalCost(ServiceOrder order) {
-        return order.getWorks().stream()
-                .map(work -> work.getPartsCost().add(work.getLaborCost()))
-                .reduce(ZERO_COST, BigDecimal::add);
     }
 
     private static void printExpectedError(String scenario, DomainException exception) {
