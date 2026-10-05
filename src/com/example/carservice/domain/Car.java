@@ -24,41 +24,20 @@ public class Car {
         return vin;
     }
 
-    public void setVin(String vin) {
-        validateVin(vin);
-        this.vin = vin;
-    }
-
     public String getMake() {
         return make;
-    }
-
-    public void setMake(String make) {
-        this.make = make;
     }
 
     public String getModel() {
         return model;
     }
 
-    public void setModel(String model) {
-        this.model = model;
-    }
-
     public int getYear() {
         return year;
     }
 
-    public void setYear(int year) {
-        this.year = year;
-    }
-
     public Customer getOwner() {
         return owner;
-    }
-
-    public void setOwner(Customer owner) {
-        this.owner = owner;
     }
 
     private void validateVin(String vin) {

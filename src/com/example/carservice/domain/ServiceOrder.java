@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ServiceOrder {
-    private static double URGENT_LABOR_SURCHARGE_FACTOR = 1.20;
+    private static BigDecimal URGENT_LABOR_SURCHARGE_FACTOR = new BigDecimal("1.20");
     private static String INVALID_DIAGNOSE_STATUS_MESSAGE = "Only created orders can be diagnosed.";
     private static String INVALID_APPROVE_STATUS_MESSAGE = "Only diagnosed orders can be approved.";
     private static String EMPTY_ORDER_MESSAGE = "An order cannot be approved without service work.";
@@ -21,7 +21,7 @@ public class ServiceOrder {
     private static String INVALID_COMPLETE_STATUS_MESSAGE = "Only in-progress orders can be completed.";
     private static String UNFINISHED_WORK_MESSAGE = "An order cannot be completed with unfinished work.";
     private static String CLOSED_ORDER_MESSAGE = "A completed or cancelled order cannot be modified.";
-    private static String CLOSED_ORDER_TRANSITION_MESSAGE = "A completed or cancelled order cannot change status.";
+    private static String INVALID_CANCEL_STATUS_MESSAGE = "Cannot cancel order in status: ";
     private static String WORK_REQUIRED_MESSAGE = "Service work is required.";
 
     private String id;
@@ -67,7 +67,7 @@ public class ServiceOrder {
         this.priority = priority;
     }
 
-    public double calculateTotalCost() {
+    public BigDecimal calculateTotalCost() {
         BigDecimal partsCost = BigDecimal.ZERO;
         BigDecimal laborCost = BigDecimal.ZERO;
         for (ServiceWork work : works) {
@@ -75,9 +75,9 @@ public class ServiceOrder {
             laborCost = laborCost.add(work.getLaborCost());
         }
         if (priority == OrderPriority.URGENT) {
-            laborCost = laborCost.multiply(BigDecimal.valueOf(URGENT_LABOR_SURCHARGE_FACTOR));
+            laborCost = laborCost.multiply(URGENT_LABOR_SURCHARGE_FACTOR);
         }
-        return partsCost.add(laborCost).doubleValue();
+        return partsCost.add(laborCost);
     }
 
     public void addWork(ServiceWork work) {
@@ -152,8 +152,10 @@ public class ServiceOrder {
     }
 
     public void cancel() {
-        if (isClosed()) {
-            throw new InvalidStateTransitionException(CLOSED_ORDER_TRANSITION_MESSAGE);
+        if (status != OrderStatus.CREATED
+                && status != OrderStatus.DIAGNOSED
+                && status != OrderStatus.APPROVED) {
+            throw new InvalidStateTransitionException(INVALID_CANCEL_STATUS_MESSAGE + status);
         }
         status = OrderStatus.CANCELLED;
         if (assignedMechanic != null) {

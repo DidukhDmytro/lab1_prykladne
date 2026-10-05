@@ -7,6 +7,7 @@ import com.example.carservice.domain.MechanicSpecialization;
 import com.example.carservice.domain.ServiceOrder;
 import com.example.carservice.domain.ServiceWork;
 import com.example.carservice.exception.EntityAlreadyExistsException;
+import com.example.carservice.exception.EntityNotFoundException;
 import com.example.carservice.exception.InvalidArgumentException;
 import com.example.carservice.exception.MechanicAlreadyAssignedException;
 import com.example.carservice.exception.MechanicNotCompatibleException;
@@ -17,6 +18,8 @@ public class CarService {
     private static String ENTITY_REQUIRED_MESSAGE = "Registered entities must not be null.";
     private static String DUPLICATE_ENTITY_MESSAGE = "An entity with identifier '%s' is already registered.";
     private static String DUPLICATE_VIN_MESSAGE = "A car with VIN '%s' is already registered.";
+    private static String UNREGISTERED_CAR_ORDER_MESSAGE =
+            "Cannot create order for unregistered car with VIN: %s";
     private static String MECHANIC_REQUIRED_MESSAGE = "A mechanic is required for order assignment.";
     private static String ORDER_REQUIRED_MESSAGE = "An order is required for mechanic assignment.";
     private static String MECHANIC_ALREADY_ASSIGNED_MESSAGE = "The mechanic is already assigned to an order.";
@@ -55,6 +58,11 @@ public class CarService {
     public void registerOrder(ServiceOrder order) {
         if (order == null) {
             throw new InvalidArgumentException(ENTITY_REQUIRED_MESSAGE);
+        }
+        Car car = order.getCar();
+        if (car == null || !carsByVin.containsKey(car.getVin())) {
+            String vin = car == null ? "null" : car.getVin();
+            throw new EntityNotFoundException(String.format(UNREGISTERED_CAR_ORDER_MESSAGE, vin));
         }
         registerEntity(orders, order.getId(), order);
     }

@@ -8,6 +8,7 @@ import com.example.carservice.domain.OrderPriority;
 import com.example.carservice.domain.ServiceOrder;
 import com.example.carservice.domain.ServiceWork;
 import com.example.carservice.exception.DomainException;
+import com.example.carservice.exception.InvalidStateTransitionException;
 import com.example.carservice.service.CarService;
 import java.math.BigDecimal;
 
@@ -43,17 +44,20 @@ public class CarServiceDemo {
     private static String OTHER_ACTIVE_ORDER_ID = "order-other-active";
     private static String NORMAL_PRIORITY_ORDER_ID = "order-normal-priority";
     private static String URGENT_PRIORITY_ORDER_ID = "order-urgent-priority";
+    private static String INVALID_TRANSITION_ORDER_ID = "order-invalid-transition";
     private static String DUPLICATE_VIN_TEST = "Duplicate VIN registration";
     private static String EMPTY_ORDER_TEST = "Approving an empty order";
     private static String INCOMPATIBLE_MECHANIC_TEST = "Assigning an incompatible mechanic";
     private static String BUSY_MECHANIC_TEST = "Assigning a busy mechanic";
     private static String COMPLETED_ORDER_TEST = "Modifying a completed order";
     private static String POSITIVE_FLOW_MESSAGE = "Positive order flow completed.";
-    private static String TOTAL_COST_FORMAT = "Total order cost: %s";
+    private static String TOTAL_COST_FORMAT = "Total order cost: %.2f";
     private static String PRIORITY_TOTAL_COST_FORMAT = "%s order total cost: %.2f";
     private static String NORMAL_PRIORITY_LABEL = "Normal";
     private static String URGENT_PRIORITY_LABEL = "Urgent";
     private static String EXPECTED_ERROR_FORMAT = "%s: expected error - %s";
+    private static String INVALID_TRANSITION_ERROR_FORMAT =
+            "Invalid status transition check: expected error -> %s";
 
     private CarServiceDemo() {
     }
@@ -103,6 +107,15 @@ public class CarServiceDemo {
         demonstrateIncompatibleMechanicRejection(carService, car, brakesMechanic);
         demonstrateBusyMechanicRejection(carService, car, engineMechanic);
         demonstrateCompletedOrderModificationRejection(positiveOrder);
+
+        ServiceOrder invalidTransitionOrder = new ServiceOrder(INVALID_TRANSITION_ORDER_ID, car);
+        try {
+            invalidTransitionOrder.complete();
+        } catch (InvalidStateTransitionException exception) {
+            System.out.println(String.format(
+                    INVALID_TRANSITION_ERROR_FORMAT,
+                    exception.getMessage()));
+        }
     }
 
     private static void demonstrateDuplicateVinRejection(CarService carService, Customer customer) {

@@ -21,24 +21,12 @@ public class Mechanic {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getFullName() {
         return fullName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
     public MechanicSpecialization getSpecialization() {
         return specialization;
-    }
-
-    public void setSpecialization(MechanicSpecialization specialization) {
-        this.specialization = specialization;
     }
 
     public boolean isBusy() {
