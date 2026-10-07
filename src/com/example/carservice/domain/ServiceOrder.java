@@ -67,11 +67,22 @@ public class ServiceOrder {
         this.priority = priority;
     }
 
+    public BigDecimal calculatePartsTotal() {
+        BigDecimal partsTotal = BigDecimal.ZERO;
+        for (ServiceWork work : works) {
+            partsTotal = partsTotal.add(work.getPartsCost());
+        }
+        return partsTotal;
+    }
+
+    public Present getPresent() {
+        return new Present(calculatePartsTotal());
+    }
+
     public BigDecimal calculateTotalCost() {
-        BigDecimal partsCost = BigDecimal.ZERO;
+        BigDecimal partsCost = calculatePartsTotal();
         BigDecimal laborCost = BigDecimal.ZERO;
         for (ServiceWork work : works) {
-            partsCost = partsCost.add(work.getPartsCost());
             laborCost = laborCost.add(work.getLaborCost());
         }
         if (priority == OrderPriority.URGENT) {

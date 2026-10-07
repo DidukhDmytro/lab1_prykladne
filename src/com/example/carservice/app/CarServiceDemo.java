@@ -30,7 +30,7 @@ public class CarServiceDemo {
     private static String POSITIVE_ORDER_ID = "order-positive";
     private static String ENGINE_WORK_DESCRIPTION = "Engine service";
     private static String BRAKES_WORK_DESCRIPTION = "Brake service";
-    private static String ENGINE_PARTS_COST_VALUE = "120.00";
+    private static String ENGINE_PARTS_COST_VALUE = "200.00";
     private static String ENGINE_LABOR_COST_VALUE = "85.00";
     private static String BRAKES_PARTS_COST_VALUE = "60.00";
     private static String BRAKES_LABOR_COST_VALUE = "45.00";
@@ -45,6 +45,12 @@ public class CarServiceDemo {
     private static String NORMAL_PRIORITY_ORDER_ID = "order-normal-priority";
     private static String URGENT_PRIORITY_ORDER_ID = "order-urgent-priority";
     private static String INVALID_TRANSITION_ORDER_ID = "order-invalid-transition";
+    private static String INTERIOR_CLEANING_GIFT_ORDER_ID = "order-interior-cleaning-gift";
+    private static String DISCOUNT_VOUCHER_GIFT_ORDER_ID = "order-discount-voucher-gift";
+    private static String GIFT_WORK_DESCRIPTION = "Parts order";
+    private static String INTERIOR_CLEANING_PARTS_TOTAL_VALUE = "550.00";
+    private static String DISCOUNT_VOUCHER_PARTS_TOTAL_VALUE = "1111.00";
+    private static String GIFT_WORK_LABOR_COST_VALUE = "1.00";
     private static String DUPLICATE_VIN_TEST = "Duplicate VIN registration";
     private static String EMPTY_ORDER_TEST = "Approving an empty order";
     private static String INCOMPATIBLE_MECHANIC_TEST = "Assigning an incompatible mechanic";
@@ -58,6 +64,8 @@ public class CarServiceDemo {
     private static String EXPECTED_ERROR_FORMAT = "%s: expected error - %s";
     private static String INVALID_TRANSITION_ERROR_FORMAT =
             "Invalid status transition check: expected error -> %s";
+    private static String GIFT_SCENARIO_FORMAT = "Parts total: %.2f; gift: %s";
+    private static String NO_GIFT_LABEL = "No gift";
 
     private CarServiceDemo() {
     }
@@ -100,6 +108,10 @@ public class CarServiceDemo {
         positiveOrder.complete();
         System.out.println(POSITIVE_FLOW_MESSAGE);
         System.out.println(String.format(TOTAL_COST_FORMAT, positiveOrder.calculateTotalCost()));
+        positiveOrder.getPresent().getGift().ifPresent(gift ->
+                System.out.println(String.format(GIFT_SCENARIO_FORMAT,
+                        positiveOrder.calculatePartsTotal(), gift.getName())));
+        demonstrateGiftTiers(car, carService);
         demonstratePriorityCostCalculation(car, carService);
 
         demonstrateDuplicateVinRejection(carService, customer);
@@ -212,6 +224,39 @@ public class CarServiceDemo {
                 PRIORITY_TOTAL_COST_FORMAT,
                 URGENT_PRIORITY_LABEL,
                 urgentOrder.calculateTotalCost()));
+    }
+
+    private static void demonstrateGiftTiers(Car car, CarService carService) {
+        ServiceOrder interiorCleaningOrder = createApprovedOrder(
+                carService,
+                INTERIOR_CLEANING_GIFT_ORDER_ID,
+                car,
+                createGiftWork(INTERIOR_CLEANING_PARTS_TOTAL_VALUE));
+        ServiceOrder discountVoucherOrder = createApprovedOrder(
+                carService,
+                DISCOUNT_VOUCHER_GIFT_ORDER_ID,
+                car,
+                createGiftWork(DISCOUNT_VOUCHER_PARTS_TOTAL_VALUE));
+        printGiftScenario(interiorCleaningOrder);
+        printGiftScenario(discountVoucherOrder);
+    }
+
+    private static ServiceWork createGiftWork(String partsCostValue) {
+        return new ServiceWork(
+                GIFT_WORK_DESCRIPTION,
+                new BigDecimal(partsCostValue),
+                new BigDecimal(GIFT_WORK_LABOR_COST_VALUE),
+                MechanicSpecialization.GENERAL);
+    }
+
+    private static void printGiftScenario(ServiceOrder order) {
+        String giftName = order.getPresent().getGift()
+                .map(gift -> gift.getName())
+                .orElse(NO_GIFT_LABEL);
+        System.out.println(String.format(
+                GIFT_SCENARIO_FORMAT,
+                order.calculatePartsTotal(),
+                giftName));
     }
 
     private static ServiceOrder createApprovedOrder(
