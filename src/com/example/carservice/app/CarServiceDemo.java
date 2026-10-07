@@ -13,82 +13,82 @@ import com.example.carservice.service.CarService;
 import java.math.BigDecimal;
 
 public class CarServiceDemo {
-    private static String CUSTOMER_ID = "customer-001";
-    private static String CUSTOMER_NAME = "Alex Morgan";
-    private static String CUSTOMER_PHONE = "+1-555-0100";
-    private static String CAR_VIN = "DEMO-VIN-001";
-    private static String CAR_MAKE = "Example Motors";
-    private static String CAR_MODEL = "Roadster";
-    private static int CAR_YEAR = 2024;
-    private static String GENERAL_MECHANIC_ID = "mechanic-general";
-    private static String ENGINE_MECHANIC_ID = "mechanic-engine";
-    private static String BRAKES_MECHANIC_ID = "mechanic-brakes";
-    private static String GENERAL_MECHANIC_NAME = "Taylor General";
-    private static String ENGINE_MECHANIC_NAME = "Jordan Engine";
-    private static String BRAKES_MECHANIC_NAME = "Casey Brakes";
-    private static boolean MECHANIC_INITIAL_BUSY = false;
-    private static String POSITIVE_ORDER_ID = "order-positive";
-    private static String ENGINE_WORK_DESCRIPTION = "Engine service";
-    private static String BRAKES_WORK_DESCRIPTION = "Brake service";
-    private static String ENGINE_PARTS_COST_VALUE = "200.00";
-    private static String ENGINE_LABOR_COST_VALUE = "85.00";
-    private static String BRAKES_PARTS_COST_VALUE = "60.00";
-    private static String BRAKES_LABOR_COST_VALUE = "45.00";
-    private static BigDecimal ENGINE_PARTS_COST = new BigDecimal(ENGINE_PARTS_COST_VALUE);
-    private static BigDecimal ENGINE_LABOR_COST = new BigDecimal(ENGINE_LABOR_COST_VALUE);
-    private static BigDecimal BRAKES_PARTS_COST = new BigDecimal(BRAKES_PARTS_COST_VALUE);
-    private static BigDecimal BRAKES_LABOR_COST = new BigDecimal(BRAKES_LABOR_COST_VALUE);
-    private static String EMPTY_ORDER_ID = "order-empty";
-    private static String INCOMPATIBLE_ORDER_ID = "order-incompatible";
-    private static String BUSY_ORDER_ID = "order-busy";
-    private static String OTHER_ACTIVE_ORDER_ID = "order-other-active";
-    private static String NORMAL_PRIORITY_ORDER_ID = "order-normal-priority";
-    private static String URGENT_PRIORITY_ORDER_ID = "order-urgent-priority";
-    private static String INVALID_TRANSITION_ORDER_ID = "order-invalid-transition";
-    private static String INTERIOR_CLEANING_GIFT_ORDER_ID = "order-interior-cleaning-gift";
-    private static String DISCOUNT_VOUCHER_GIFT_ORDER_ID = "order-discount-voucher-gift";
-    private static String GIFT_WORK_DESCRIPTION = "Parts order";
-    private static String INTERIOR_CLEANING_PARTS_TOTAL_VALUE = "550.00";
-    private static String DISCOUNT_VOUCHER_PARTS_TOTAL_VALUE = "1111.00";
-    private static String GIFT_WORK_LABOR_COST_VALUE = "1.00";
-    private static String DUPLICATE_VIN_TEST = "Duplicate VIN registration";
-    private static String EMPTY_ORDER_TEST = "Approving an empty order";
-    private static String INCOMPATIBLE_MECHANIC_TEST = "Assigning an incompatible mechanic";
-    private static String BUSY_MECHANIC_TEST = "Assigning a busy mechanic";
-    private static String COMPLETED_ORDER_TEST = "Modifying a completed order";
-    private static String POSITIVE_FLOW_MESSAGE = "Positive order flow completed.";
-    private static String TOTAL_COST_FORMAT = "Total order cost: %.2f";
-    private static String PRIORITY_TOTAL_COST_FORMAT = "%s order total cost: %.2f";
-    private static String NORMAL_PRIORITY_LABEL = "Normal";
-    private static String URGENT_PRIORITY_LABEL = "Urgent";
-    private static String EXPECTED_ERROR_FORMAT = "%s: expected error - %s";
-    private static String INVALID_TRANSITION_ERROR_FORMAT =
+    private static String customerId = "customer-001";
+    private static String customerName = "Alex Morgan";
+    private static String customerPhone = "+1-555-0100";
+    private static String carVin = "DEMO-VIN-001";
+    private static String carMake = "Example Motors";
+    private static String carModel = "Roadster";
+    private static int carYear = 2024;
+    private static String generalMechanicId = "mechanic-general";
+    private static String engineMechanicId = "mechanic-engine";
+    private static String brakesMechanicId = "mechanic-brakes";
+    private static String generalMechanicName = "Taylor General";
+    private static String engineMechanicName = "Jordan Engine";
+    private static String brakesMechanicName = "Casey Brakes";
+    private static boolean mechanicInitialBusy = false;
+    private static String positiveOrderId = "order-positive";
+    private static String engineWorkDescription = "Engine service";
+    private static String brakesWorkDescription = "Brake service";
+    private static String enginePartsCostValue = "200.00";
+    private static String engineLaborCostValue = "85.00";
+    private static String brakesPartsCostValue = "60.00";
+    private static String brakesLaborCostValue = "45.00";
+    private static BigDecimal enginePartsCost = new BigDecimal(enginePartsCostValue);
+    private static BigDecimal engineLaborCost = new BigDecimal(engineLaborCostValue);
+    private static BigDecimal brakesPartsCost = new BigDecimal(brakesPartsCostValue);
+    private static BigDecimal brakesLaborCost = new BigDecimal(brakesLaborCostValue);
+    private static String emptyOrderId = "order-empty";
+    private static String incompatibleOrderId = "order-incompatible";
+    private static String busyOrderId = "order-busy";
+    private static String otherActiveOrderId = "order-other-active";
+    private static String normalPriorityOrderId = "order-normal-priority";
+    private static String urgentPriorityOrderId = "order-urgent-priority";
+    private static String invalidTransitionOrderId = "order-invalid-transition";
+    private static String interiorCleaningGiftOrderId = "order-interior-cleaning-gift";
+    private static String discountVoucherGiftOrderId = "order-discount-voucher-gift";
+    private static String giftWorkDescription = "Parts order";
+    private static String interiorCleaningPartsTotalValue = "550.00";
+    private static String discountVoucherPartsTotalValue = "1111.00";
+    private static String giftWorkLaborCostValue = "1.00";
+    private static String duplicateVinTest = "Duplicate VIN registration";
+    private static String emptyOrderTest = "Approving an empty order";
+    private static String incompatibleMechanicTest = "Assigning an incompatible mechanic";
+    private static String busyMechanicTest = "Assigning a busy mechanic";
+    private static String completedOrderTest = "Modifying a completed order";
+    private static String positiveFlowMessage = "Positive order flow completed.";
+    private static String totalCostFormat = "Total order cost: %.2f";
+    private static String priorityTotalCostFormat = "%s order total cost: %.2f";
+    private static String normalPriorityLabel = "Normal";
+    private static String urgentPriorityLabel = "Urgent";
+    private static String expectedErrorFormat = "%s: expected error - %s";
+    private static String invalidTransitionErrorFormat =
             "Invalid status transition check: expected error -> %s";
-    private static String GIFT_SCENARIO_FORMAT = "Parts total: %.2f; gift: %s";
-    private static String NO_GIFT_LABEL = "No gift";
+    private static String giftScenarioFormat = "Parts total: %.2f; gift: %s";
+    private static String noGiftLabel = "No gift";
 
     private CarServiceDemo() {
     }
 
     public static void main(String[] args) {
         CarService carService = new CarService();
-        Customer customer = new Customer(CUSTOMER_ID, CUSTOMER_NAME, CUSTOMER_PHONE);
-        Car car = new Car(CAR_VIN, CAR_MAKE, CAR_MODEL, CAR_YEAR, customer);
+        Customer customer = carService.createCustomer(customerId, customerName, customerPhone);
+        Car car = carService.createCar(carVin, carMake, carModel, carYear, customer);
         Mechanic generalMechanic = new Mechanic(
-                GENERAL_MECHANIC_ID,
-                GENERAL_MECHANIC_NAME,
+                generalMechanicId,
+                generalMechanicName,
                 MechanicSpecialization.GENERAL,
-                MECHANIC_INITIAL_BUSY);
+                mechanicInitialBusy);
         Mechanic engineMechanic = new Mechanic(
-                ENGINE_MECHANIC_ID,
-                ENGINE_MECHANIC_NAME,
+                engineMechanicId,
+                engineMechanicName,
                 MechanicSpecialization.ENGINE,
-                MECHANIC_INITIAL_BUSY);
+                mechanicInitialBusy);
         Mechanic brakesMechanic = new Mechanic(
-                BRAKES_MECHANIC_ID,
-                BRAKES_MECHANIC_NAME,
+                brakesMechanicId,
+                brakesMechanicName,
                 MechanicSpecialization.BRAKES,
-                MECHANIC_INITIAL_BUSY);
+                mechanicInitialBusy);
 
         carService.registerCustomer(customer);
         carService.registerCar(car);
@@ -98,19 +98,19 @@ public class CarServiceDemo {
 
         ServiceOrder positiveOrder = createApprovedOrder(
                 carService,
-                POSITIVE_ORDER_ID,
+                positiveOrderId,
                 car,
-                createEngineWork(),
-                createBrakesWork());
+                createEngineWork(carService),
+                createBrakesWork(carService));
         carService.assignMechanicToOrder(positiveOrder, generalMechanic);
         positiveOrder.startProgress();
         completeWorks(positiveOrder);
         positiveOrder.complete();
-        System.out.println(POSITIVE_FLOW_MESSAGE);
-        System.out.println(String.format(TOTAL_COST_FORMAT, positiveOrder.calculateTotalCost()));
-        positiveOrder.getPresent().getGift().ifPresent(gift ->
-                System.out.println(String.format(GIFT_SCENARIO_FORMAT,
-                        positiveOrder.calculatePartsTotal(), gift.getName())));
+        System.out.println(positiveFlowMessage);
+        System.out.println(String.format(totalCostFormat, carService.calculateTotalCost(positiveOrder)));
+        carService.createPresent(positiveOrder).getGift().ifPresent(gift ->
+                System.out.println(String.format(giftScenarioFormat,
+                        carService.calculatePartsTotal(positiveOrder), gift.getName())));
         demonstrateGiftTiers(car, carService);
         demonstratePriorityCostCalculation(car, carService);
 
@@ -118,14 +118,14 @@ public class CarServiceDemo {
         demonstrateEmptyOrderApprovalRejection(carService, car);
         demonstrateIncompatibleMechanicRejection(carService, car, brakesMechanic);
         demonstrateBusyMechanicRejection(carService, car, engineMechanic);
-        demonstrateCompletedOrderModificationRejection(positiveOrder);
+        demonstrateCompletedOrderModificationRejection(positiveOrder, carService);
 
-        ServiceOrder invalidTransitionOrder = new ServiceOrder(INVALID_TRANSITION_ORDER_ID, car);
+        ServiceOrder invalidTransitionOrder = new ServiceOrder(invalidTransitionOrderId, car);
         try {
             invalidTransitionOrder.complete();
         } catch (InvalidStateTransitionException exception) {
             System.out.println(String.format(
-                    INVALID_TRANSITION_ERROR_FORMAT,
+                    invalidTransitionErrorFormat,
                     exception.getMessage()));
         }
     }
@@ -133,21 +133,21 @@ public class CarServiceDemo {
     private static void demonstrateDuplicateVinRejection(CarService carService, Customer customer) {
         // This verifies that registered VINs cannot be reused.
         try {
-            carService.registerCar(new Car(CAR_VIN, CAR_MAKE, CAR_MODEL, CAR_YEAR, customer));
+            carService.registerCar(carService.createCar(carVin, carMake, carModel, carYear, customer));
         } catch (DomainException exception) {
-            printExpectedError(DUPLICATE_VIN_TEST, exception);
+            printExpectedError(duplicateVinTest, exception);
         }
     }
 
     private static void demonstrateEmptyOrderApprovalRejection(CarService carService, Car car) {
         // This verifies that approval requires at least one work item.
-        ServiceOrder order = new ServiceOrder(EMPTY_ORDER_ID, car);
+        ServiceOrder order = new ServiceOrder(emptyOrderId, car);
         carService.registerOrder(order);
         order.diagnose();
         try {
             order.approve();
         } catch (DomainException exception) {
-            printExpectedError(EMPTY_ORDER_TEST, exception);
+            printExpectedError(emptyOrderTest, exception);
         }
     }
 
@@ -158,13 +158,13 @@ public class CarServiceDemo {
         // This verifies that every work specialization must match the mechanic.
         ServiceOrder order = createApprovedOrder(
                 carService,
-                INCOMPATIBLE_ORDER_ID,
+                incompatibleOrderId,
                 car,
-                createEngineWork());
+                createEngineWork(carService));
         try {
             carService.assignMechanicToOrder(order, mechanic);
         } catch (DomainException exception) {
-            printExpectedError(INCOMPATIBLE_MECHANIC_TEST, exception);
+            printExpectedError(incompatibleMechanicTest, exception);
         }
     }
 
@@ -175,87 +175,89 @@ public class CarServiceDemo {
         // This verifies that a mechanic assigned to active work cannot be reused.
         ServiceOrder activeOrder = createApprovedOrder(
                 carService,
-                BUSY_ORDER_ID,
+                busyOrderId,
                 car,
-                createEngineWork());
+                createEngineWork(carService));
         carService.assignMechanicToOrder(activeOrder, mechanic);
         activeOrder.startProgress();
 
         ServiceOrder otherOrder = createApprovedOrder(
                 carService,
-                OTHER_ACTIVE_ORDER_ID,
+                otherActiveOrderId,
                 car,
-                createEngineWork());
+                createEngineWork(carService));
         try {
             carService.assignMechanicToOrder(otherOrder, mechanic);
         } catch (DomainException exception) {
-            printExpectedError(BUSY_MECHANIC_TEST, exception);
+            printExpectedError(busyMechanicTest, exception);
         }
     }
 
-    private static void demonstrateCompletedOrderModificationRejection(ServiceOrder order) {
+    private static void demonstrateCompletedOrderModificationRejection(
+            ServiceOrder order,
+            CarService carService) {
         // This verifies that completed orders cannot be modified.
         try {
-            order.addWork(createEngineWork());
+            carService.addWork(order, createEngineWork(carService));
         } catch (DomainException exception) {
-            printExpectedError(COMPLETED_ORDER_TEST, exception);
+            printExpectedError(completedOrderTest, exception);
         }
     }
 
     private static void demonstratePriorityCostCalculation(Car car, CarService carService) {
         ServiceOrder normalOrder = createApprovedOrder(
                 carService,
-                NORMAL_PRIORITY_ORDER_ID,
+                normalPriorityOrderId,
                 car,
-                createEngineWork(),
-                createBrakesWork());
+                createEngineWork(carService),
+                createBrakesWork(carService));
         ServiceOrder urgentOrder = createApprovedOrder(
                 carService,
-                URGENT_PRIORITY_ORDER_ID,
+                urgentPriorityOrderId,
                 car,
-                createEngineWork(),
-                createBrakesWork());
+                createEngineWork(carService),
+                createBrakesWork(carService));
         urgentOrder.setPriority(OrderPriority.URGENT);
         System.out.println(String.format(
-                PRIORITY_TOTAL_COST_FORMAT,
-                NORMAL_PRIORITY_LABEL,
-                normalOrder.calculateTotalCost()));
+                priorityTotalCostFormat,
+                normalPriorityLabel,
+                carService.calculateTotalCost(normalOrder)));
         System.out.println(String.format(
-                PRIORITY_TOTAL_COST_FORMAT,
-                URGENT_PRIORITY_LABEL,
-                urgentOrder.calculateTotalCost()));
+                priorityTotalCostFormat,
+                urgentPriorityLabel,
+                carService.calculateTotalCost(urgentOrder)));
     }
 
     private static void demonstrateGiftTiers(Car car, CarService carService) {
         ServiceOrder interiorCleaningOrder = createApprovedOrder(
                 carService,
-                INTERIOR_CLEANING_GIFT_ORDER_ID,
+                interiorCleaningGiftOrderId,
                 car,
-                createGiftWork(INTERIOR_CLEANING_PARTS_TOTAL_VALUE));
+                createGiftWork(carService, interiorCleaningPartsTotalValue));
         ServiceOrder discountVoucherOrder = createApprovedOrder(
                 carService,
-                DISCOUNT_VOUCHER_GIFT_ORDER_ID,
+                discountVoucherGiftOrderId,
                 car,
-                createGiftWork(DISCOUNT_VOUCHER_PARTS_TOTAL_VALUE));
-        printGiftScenario(interiorCleaningOrder);
-        printGiftScenario(discountVoucherOrder);
+                createGiftWork(carService, discountVoucherPartsTotalValue));
+        printGiftScenario(interiorCleaningOrder, carService);
+        printGiftScenario(discountVoucherOrder, carService);
     }
 
-    private static ServiceWork createGiftWork(String partsCostValue) {
-        return new ServiceWork(
-                GIFT_WORK_DESCRIPTION,
+    private static ServiceWork createGiftWork(CarService carService, String partsCostValue) {
+        return carService.createServiceWork(
+                giftWorkDescription,
                 new BigDecimal(partsCostValue),
-                new BigDecimal(GIFT_WORK_LABOR_COST_VALUE),
+                new BigDecimal(giftWorkLaborCostValue),
                 MechanicSpecialization.GENERAL);
     }
 
-    private static void printGiftScenario(ServiceOrder order) {
-        String giftName = order.getPresent().getGift()
+    private static void printGiftScenario(ServiceOrder order, CarService carService) {
+        String giftName = carService.createPresent(order).getGift()
                 .map(gift -> gift.getName())
-                .orElse(NO_GIFT_LABEL);
+                .orElse(noGiftLabel);
         System.out.println(String.format(
-                GIFT_SCENARIO_FORMAT,
-                order.calculatePartsTotal(),
+                giftScenarioFormat,
+                carService.calculatePartsTotal(order),
                 giftName));
     }
 
@@ -266,7 +268,7 @@ public class CarServiceDemo {
             ServiceWork... works) {
         ServiceOrder order = new ServiceOrder(orderId, car);
         for (ServiceWork work : works) {
-            order.addWork(work);
+            carService.addWork(order, work);
         }
         carService.registerOrder(order);
         order.diagnose();
@@ -274,19 +276,19 @@ public class CarServiceDemo {
         return order;
     }
 
-    private static ServiceWork createEngineWork() {
-        return new ServiceWork(
-                ENGINE_WORK_DESCRIPTION,
-                ENGINE_PARTS_COST,
-                ENGINE_LABOR_COST,
+    private static ServiceWork createEngineWork(CarService carService) {
+        return carService.createServiceWork(
+                engineWorkDescription,
+                enginePartsCost,
+                engineLaborCost,
                 MechanicSpecialization.ENGINE);
     }
 
-    private static ServiceWork createBrakesWork() {
-        return new ServiceWork(
-                BRAKES_WORK_DESCRIPTION,
-                BRAKES_PARTS_COST,
-                BRAKES_LABOR_COST,
+    private static ServiceWork createBrakesWork(CarService carService) {
+        return carService.createServiceWork(
+                brakesWorkDescription,
+                brakesPartsCost,
+                brakesLaborCost,
                 MechanicSpecialization.BRAKES);
     }
 
@@ -297,6 +299,6 @@ public class CarServiceDemo {
     }
 
     private static void printExpectedError(String scenario, DomainException exception) {
-        System.out.println(String.format(EXPECTED_ERROR_FORMAT, scenario, exception.getMessage()));
+        System.out.println(String.format(expectedErrorFormat, scenario, exception.getMessage()));
     }
 }

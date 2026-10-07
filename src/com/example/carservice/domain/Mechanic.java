@@ -1,10 +1,9 @@
 package com.example.carservice.domain;
 
+import com.example.carservice.exception.DomainMessages;
 import com.example.carservice.exception.MechanicAlreadyAssignedException;
 
 public class Mechanic {
-    private static String ALREADY_ASSIGNED_MESSAGE = "Mechanic is already assigned to an order.";
-
     private String id;
     private String fullName;
     private MechanicSpecialization specialization;
@@ -35,7 +34,7 @@ public class Mechanic {
 
     public void assignToOrder() {
         if (busy) {
-            throw new MechanicAlreadyAssignedException(ALREADY_ASSIGNED_MESSAGE);
+            throw new MechanicAlreadyAssignedException(DomainMessages.mechanicAlreadyAssigned);
         }
         busy = true;
     }

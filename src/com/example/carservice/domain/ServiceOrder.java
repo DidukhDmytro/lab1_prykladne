@@ -1,29 +1,14 @@
 package com.example.carservice.domain;
 
-import com.example.carservice.exception.InvalidArgumentException;
+import com.example.carservice.exception.DomainMessages;
 import com.example.carservice.exception.InvalidStateTransitionException;
 import com.example.carservice.exception.MechanicNotCompatibleException;
 import com.example.carservice.exception.OrderModificationNotAllowedException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class ServiceOrder {
-    private static BigDecimal URGENT_LABOR_SURCHARGE_FACTOR = new BigDecimal("1.20");
-    private static String INVALID_DIAGNOSE_STATUS_MESSAGE = "Only created orders can be diagnosed.";
-    private static String INVALID_APPROVE_STATUS_MESSAGE = "Only diagnosed orders can be approved.";
-    private static String EMPTY_ORDER_MESSAGE = "An order cannot be approved without service work.";
-    private static String INVALID_PROGRESS_STATUS_MESSAGE = "Only approved orders can start progress.";
-    private static String MECHANIC_REQUIRED_MESSAGE = "A mechanic must be assigned before work starts.";
-    private static String MECHANIC_REQUIRED_FOR_ASSIGNMENT_MESSAGE = "A mechanic is required for assignment.";
-    private static String MECHANIC_NOT_COMPATIBLE_MESSAGE = "The mechanic is not compatible with the order work.";
-    private static String INVALID_COMPLETE_STATUS_MESSAGE = "Only in-progress orders can be completed.";
-    private static String UNFINISHED_WORK_MESSAGE = "An order cannot be completed with unfinished work.";
-    private static String CLOSED_ORDER_MESSAGE = "A completed or cancelled order cannot be modified.";
-    private static String INVALID_CANCEL_STATUS_MESSAGE = "Cannot cancel order in status: ";
-    private static String WORK_REQUIRED_MESSAGE = "Service work is required.";
-
     private String id;
     private Car car;
     private List<ServiceWork> works;
@@ -67,35 +52,8 @@ public class ServiceOrder {
         this.priority = priority;
     }
 
-    public BigDecimal calculatePartsTotal() {
-        BigDecimal partsTotal = BigDecimal.ZERO;
-        for (ServiceWork work : works) {
-            partsTotal = partsTotal.add(work.getPartsCost());
-        }
-        return partsTotal;
-    }
-
-    public Present getPresent() {
-        return new Present(calculatePartsTotal());
-    }
-
-    public BigDecimal calculateTotalCost() {
-        BigDecimal partsCost = calculatePartsTotal();
-        BigDecimal laborCost = BigDecimal.ZERO;
-        for (ServiceWork work : works) {
-            laborCost = laborCost.add(work.getLaborCost());
-        }
-        if (priority == OrderPriority.URGENT) {
-            laborCost = laborCost.multiply(URGENT_LABOR_SURCHARGE_FACTOR);
-        }
-        return partsCost.add(laborCost);
-    }
-
     public void addWork(ServiceWork work) {
         ensureModifiable();
-        if (work == null) {
-            throw new InvalidArgumentException(WORK_REQUIRED_MESSAGE);
-        }
         works.add(work);
     }
 
@@ -106,11 +64,8 @@ public class ServiceOrder {
 
     public void assignMechanic(Mechanic mechanic) {
         ensureModifiable();
-        if (mechanic == null) {
-            throw new InvalidArgumentException(MECHANIC_REQUIRED_FOR_ASSIGNMENT_MESSAGE);
-        }
         if (!isCompatible(mechanic)) {
-            throw new MechanicNotCompatibleException(MECHANIC_NOT_COMPATIBLE_MESSAGE);
+            throw new MechanicNotCompatibleException(DomainMessages.mechanicNotCompatible);
         }
         if (mechanic == assignedMechanic) {
             return;
@@ -124,39 +79,39 @@ public class ServiceOrder {
 
     public void diagnose() {
         if (status != OrderStatus.CREATED) {
-            throw new InvalidStateTransitionException(INVALID_DIAGNOSE_STATUS_MESSAGE);
+            throw new InvalidStateTransitionException(DomainMessages.invalidDiagnoseStatus);
         }
         status = OrderStatus.DIAGNOSED;
     }
 
     public void approve() {
         if (status != OrderStatus.DIAGNOSED) {
-            throw new InvalidStateTransitionException(INVALID_APPROVE_STATUS_MESSAGE);
+            throw new InvalidStateTransitionException(DomainMessages.invalidApproveStatus);
         }
         // Approval requires at least one work item.
         if (works.isEmpty()) {
-            throw new InvalidStateTransitionException(EMPTY_ORDER_MESSAGE);
+            throw new InvalidStateTransitionException(DomainMessages.emptyOrder);
         }
         status = OrderStatus.APPROVED;
     }
 
     public void startProgress() {
         if (status != OrderStatus.APPROVED) {
-            throw new InvalidStateTransitionException(INVALID_PROGRESS_STATUS_MESSAGE);
+            throw new InvalidStateTransitionException(DomainMessages.invalidProgressStatus);
         }
         // A mechanic must be assigned before work can begin.
         if (assignedMechanic == null) {
-            throw new InvalidStateTransitionException(MECHANIC_REQUIRED_MESSAGE);
+            throw new InvalidStateTransitionException(DomainMessages.mechanicRequired);
         }
         status = OrderStatus.IN_PROGRESS;
     }
 
     public void complete() {
         if (status != OrderStatus.IN_PROGRESS) {
-            throw new InvalidStateTransitionException(INVALID_COMPLETE_STATUS_MESSAGE);
+            throw new InvalidStateTransitionException(DomainMessages.invalidCompleteStatus);
         }
         if (works.stream().anyMatch(work -> work.getStatus() != WorkStatus.COMPLETED)) {
-            throw new InvalidStateTransitionException(UNFINISHED_WORK_MESSAGE);
+            throw new InvalidStateTransitionException(DomainMessages.unfinishedWork);
         }
         status = OrderStatus.COMPLETED;
         assignedMechanic.releaseFromOrder();
@@ -166,7 +121,7 @@ public class ServiceOrder {
         if (status != OrderStatus.CREATED
                 && status != OrderStatus.DIAGNOSED
                 && status != OrderStatus.APPROVED) {
-            throw new InvalidStateTransitionException(INVALID_CANCEL_STATUS_MESSAGE + status);
+            throw new InvalidStateTransitionException(DomainMessages.invalidCancelStatus + status);
         }
         status = OrderStatus.CANCELLED;
         if (assignedMechanic != null) {
@@ -184,7 +139,7 @@ public class ServiceOrder {
     private void ensureModifiable() {
         // Completed and cancelled orders cannot be changed.
         if (isClosed()) {
-            throw new OrderModificationNotAllowedException(CLOSED_ORDER_MESSAGE);
+            throw new OrderModificationNotAllowedException(DomainMessages.closedOrder);
         }
     }
 
