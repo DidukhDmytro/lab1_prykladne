@@ -45,9 +45,11 @@ public class CarServiceDemo {
     private static String normalPriorityOrderId = "order-normal-priority";
     private static String urgentPriorityOrderId = "order-urgent-priority";
     private static String invalidTransitionOrderId = "order-invalid-transition";
+    private static String washerFluidGiftOrderId = "order-washer-fluid-gift";
     private static String interiorCleaningGiftOrderId = "order-interior-cleaning-gift";
     private static String discountVoucherGiftOrderId = "order-discount-voucher-gift";
     private static String giftWorkDescription = "Parts order";
+    private static String washerFluidPartsTotalValue = "250.00";
     private static String interiorCleaningPartsTotalValue = "550.00";
     private static String discountVoucherPartsTotalValue = "1111.00";
     private static String giftWorkLaborCostValue = "1.00";
@@ -108,9 +110,6 @@ public class CarServiceDemo {
         positiveOrder.complete();
         System.out.println(positiveFlowMessage);
         System.out.println(String.format(totalCostFormat, carService.calculateTotalCost(positiveOrder)));
-        carService.createPresent(positiveOrder).getGift().ifPresent(gift ->
-                System.out.println(String.format(giftScenarioFormat,
-                        carService.calculatePartsTotal(positiveOrder), gift.getName())));
         demonstrateGiftTiers(car, carService);
         demonstratePriorityCostCalculation(car, carService);
 
@@ -229,6 +228,11 @@ public class CarServiceDemo {
     }
 
     private static void demonstrateGiftTiers(Car car, CarService carService) {
+        ServiceOrder washerFluidOrder = createApprovedOrder(
+                carService,
+                washerFluidGiftOrderId,
+                car,
+                createGiftWork(carService, washerFluidPartsTotalValue));
         ServiceOrder interiorCleaningOrder = createApprovedOrder(
                 carService,
                 interiorCleaningGiftOrderId,
@@ -239,6 +243,7 @@ public class CarServiceDemo {
                 discountVoucherGiftOrderId,
                 car,
                 createGiftWork(carService, discountVoucherPartsTotalValue));
+        printGiftScenario(washerFluidOrder, carService);
         printGiftScenario(interiorCleaningOrder, carService);
         printGiftScenario(discountVoucherOrder, carService);
     }
